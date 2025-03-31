@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary-color: #4a6cf7;
+      --primary-dark: #3a56d4;
+      --secondary-color: #6c757d;
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --light-color: #f8f9fa;
+      --dark-color: #343a40;
+      --white: #ffffff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --radius: 8px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Nav css */
+    .navbar {
+      background-color: var(--white);
+      padding: 1rem 2rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar h1 {
+      color: var(--primary-color);
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    .navbar a {
+      color: var(--dark-color);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      background-color: var(--light-color);
+    }
+
+    .navbar a:hover {
+      background-color: var(--primary-color);
+      color: var(--white);
+    }
+
+    /* image grid */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .image-item {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .image-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .image-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .image-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .image-info {
+      padding: 1.2rem;
+      text-align: center;
+    }
+
+    .image-info p {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+
+    .image-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    /* button css */
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      text-align: center;
+    }
+
+    .download-btn {
+      background-color: var(--primary-color);
+      color: var(--white);
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .download-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .edit-btn {
+      background-color: var(--success-color);
+      color: var(--white);
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .edit-btn:hover {
+      background-color: #218838;
+    }
+
+    .delete-btn {
+      background-color: var(--danger-color);
+      color: var(--white);
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+
+    /* animation */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .image-item:nth-child(2n) {
+      animation-delay: 0.1s;
+    }
+
+    .image-item:nth-child(3n) {
+      animation-delay: 0.2s;
+    }
+
+
+    @media (max-width: 768px) {
+      .image-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        padding: 1rem;
+      }
+
+      .navbar {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <h1>Gallery</h1>
+    <a href="{% url 'upload_image' %}">Upload New Image</a>
+  </nav>
+  <div class="image-grid">
+    {% for image in images %}
+    <div class="image-item">
+      <img src="{{ image.image.url }}" alt="{{ image.title }}">
+      <div class="image-info">
+        <p>{{ image.title }}</p>
+        <div class="image-actions">
+          <a href="{% url 'download_image' image.id %}" class="download-btn">Download</a>
+          <a href="{% url 'edit_image' image.id %}" class="edit-btn">Editing</a>
+          <a href="{% url 'delete_image' image.id %}" class="delete-btn"
+            onclick="return confirm('Are you sure want to delete this？')">Delete</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+
+</html>

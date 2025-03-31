@@ -1,0 +1,357 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary-color: #4a6cf7;
+            --primary-dark: #3a56d4;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+
+        .navbar {
+            background-color: var(--white);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar h1 {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
+        .navbar a {
+            color: var(--dark-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            background-color: var(--light-color);
+        }
+
+        .navbar a:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+
+        .upload-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+        }
+
+        .upload-form {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+
+        .upload-form h1 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .upload-form-inner {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+        }
+
+        .file-upload-group {
+            margin-bottom: 2rem;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            height: 200px;
+            border: 2px dashed #ddd;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            transition: var(--transition);
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: var(--primary-color);
+        }
+
+        .file-upload-wrapper.highlight {
+            border-color: var(--primary-color);
+            background-color: rgba(74, 108, 247, 0.05);
+        }
+
+        .file-upload-wrapper.has-file {
+            border-style: solid;
+            border-color: var(--primary-color);
+        }
+
+        .file-upload-wrapper.has-preview .file-upload-text {
+            opacity: 0;
+        }
+
+        .file-upload-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .file-upload-text {
+            color: var(--secondary-color);
+            text-align: center;
+            padding: 1rem;
+            transition: var(--transition);
+        }
+
+        .file-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .has-file .file-name {
+            transform: translateY(0);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+
+        @media (max-width: 768px) {
+            .upload-container {
+                padding: 1rem;
+            }
+
+            .upload-form {
+                padding: 1.5rem;
+            }
+
+            .navbar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <h1>Gallery</h1>
+        <a href="{% url 'image_list' %}">Back</a>
+    </nav>
+
+    <div class="upload-container">
+        <div class="upload-form">
+            <h1>New Image</h1>
+            <form method="post" enctype="multipart/form-data" class="upload-form-inner">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="{{ form.title.id_for_label }}">Title</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="form-group file-upload-group">
+                    <label for="{{ form.image.id_for_label }}">Choose Image</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="{{ form.image.id_for_label }}" name="{{ form.image.html_name }}"
+                            class="file-upload-input" accept="image/*">
+                        <div class="file-upload-text">Click or drag the image here</div>
+                        <div class="file-name"></div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                    <a href="{% url 'image_list' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const fileInput = document.querySelector('.file-upload-input');
+            const fileText = document.querySelector('.file-upload-text');
+            const fileName = document.querySelector('.file-name');
+            const fileWrapper = document.querySelector('.file-upload-wrapper');
+
+            fileInput.addEventListener('change', function (e) {
+                if (this.files && this.files[0]) {
+                    fileName.textContent = this.files[0].name;
+                    fileWrapper.classList.add('has-file');
+
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        fileWrapper.style.backgroundImage = `url(${e.target.result})`;
+                        fileWrapper.classList.add('has-preview');
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                fileWrapper.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                fileWrapper.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                fileWrapper.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight() {
+                fileWrapper.classList.add('highlight');
+            }
+
+            function unhighlight() {
+                fileWrapper.classList.remove('highlight');
+            }
+
+            fileWrapper.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                fileInput.files = files;
+
+                if (files && files[0]) {
+                    fileName.textContent = files[0].name;
+                    fileWrapper.classList.add('has-file');
+
+
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        fileWrapper.style.backgroundImage = `url(${e.target.result})`;
+                        fileWrapper.classList.add('has-preview');
+                    }
+                    reader.readAsDataURL(files[0]);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
