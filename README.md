@@ -104,3 +104,14 @@ python manage.py collectstatic
 python manage.py runserver 0.0.0.0:8000
 ```
 
+---
+### AWS S3 Storage
+Editing setting.py:
+```
+# AWS_ACCESS_KEY_ID = 'ENTER YOU OWN KEY ID'  
+# AWS_SECRET_ACCESS_KEY = 'ENTER YOUR OWN ACCESS KEY'  
+# AWS_STORAGE_BUCKET_NAME = 'BUCKET NAME'  
+```
+
+
+
