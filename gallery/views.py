@@ -26,17 +26,16 @@ def download_image(request, image_id):
     image = get_object_or_404(Image, id=image_id)
     
     try:
-        import requests
-        response = requests.get(image.image.url)
-        if response.status_code == 200:
-            file_name = os.path.basename(image.image.name)
-            http_response = HttpResponse(response.content, content_type="image/jpeg")
-            http_response['Content-Disposition'] = f'attachment; filename="{file_name}"'
-            return http_response
-        else:
-            raise Http404("Could not download the image.")
+        file_name = os.path.basename(image.image.name)
+        file_content = image.image.read()
+        
+
+        http_response = HttpResponse(file_content, content_type="image/jpeg")
+        http_response['Content-Disposition'] = f'attachment; filename="{file_name}"'
+        return http_response
     except Exception as e:
         from django.http import Http404
+        print(f"download fail: {str(e)}")
         raise Http404(f"Image does not exist: {str(e)}")
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -50,18 +49,12 @@ def apply_filter(request, filter_type, image_id):  # make sure the filter_type i
         try:
             image = get_object_or_404(Image, id=image_id)
             
-
-            import requests
             from io import BytesIO
             
-            response = requests.get(image.image.url)
-            if response.status_code != 200:
-                return JsonResponse({'success': False, 'error': '无法从S3获取图片'})
-            
 
-            img = PILImage.open(BytesIO(response.content))
+            file_content = image.image.read()
+            img = PILImage.open(BytesIO(file_content))
             
-
             if filter_type == 'gray':
                 filtered_img = ImageOps.grayscale(img)
                 filtered_img = filtered_img.convert('RGB')
@@ -69,23 +62,19 @@ def apply_filter(request, filter_type, image_id):  # make sure the filter_type i
                 filtered_img = img.filter(ImageFilter.GaussianBlur(radius=2))
             elif filter_type == 'edge':
                 filtered_img = img.filter(ImageFilter.FIND_EDGES)
-
                 filtered_img = filtered_img.convert('RGB')
             elif filter_type == 'solar':
                 filtered_img = ImageOps.solarize(img, threshold=128)
             else:
                 return JsonResponse({'success': False, 'error': '不支持的滤镜类型'})
             
-
             output = BytesIO()
             filtered_img.save(output, format='JPEG')
             output.seek(0)
             
-
             from django.core.files.base import ContentFile
             image.image.save(os.path.basename(image.image.name), ContentFile(output.getvalue()), save=True)
             
-
             from django.utils import timezone
             cache_buster = int(timezone.now().timestamp())
             
