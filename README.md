@@ -74,9 +74,7 @@ This guide helps you run your Django project on an AWS EC2 instance (Amazon Linu
 - An EC2 instance is launched and accessible.
 - Python 3, pip, and Git are installed on the instance.
 - Your project is already on the instance (via `git clone` or `scp`).
-- Edit settings.py to allow your EC2 public IP
-  In settings.py, change:
-  ALLOWED_HOSTS = ['*']
+
 
 ---
 
