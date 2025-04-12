@@ -74,7 +74,7 @@ Pull requests are welcome. If you'd like to suggest features or report bugs, ple
 
 ---
 
-## Deploying to AWS EC2 (Development Environment)
+## Deploying to AWS EC2
 
 This guide helps you run your Django project on an AWS EC2 instance (Amazon Linux 2023).
 
