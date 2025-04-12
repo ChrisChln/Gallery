@@ -25,18 +25,19 @@ def upload_image(request):
 def download_image(request, image_id):
     image = get_object_or_404(Image, id=image_id)
     
-    # get the image file path
-    file_path = image.image.path
-    
-    if os.path.exists(file_path):
-        with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="image/jpeg")
-            response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
-            return response
-    else:
-        # if the image file does not exist, return a 404 error
+    try:
+        import requests
+        response = requests.get(image.image.url)
+        if response.status_code == 200:
+            file_name = os.path.basename(image.image.name)
+            http_response = HttpResponse(response.content, content_type="image/jpeg")
+            http_response['Content-Disposition'] = f'attachment; filename="{file_name}"'
+            return http_response
+        else:
+            raise Http404("Could not download the image.")
+    except Exception as e:
         from django.http import Http404
-        raise Http404("the image does not exist")
+        raise Http404(f"Image does not exist: {str(e)}")
 
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -48,34 +49,43 @@ def apply_filter(request, filter_type, image_id):  # make sure the filter_type i
     if request.method == 'POST':
         try:
             image = get_object_or_404(Image, id=image_id)
-            img_path = image.image.path
             
-            # make sure the directory exists
-            os.makedirs(os.path.dirname(img_path), exist_ok=True)
+
+            import requests
+            from io import BytesIO
             
-            # open the image
-            img = PILImage.open(img_path)
+            response = requests.get(image.image.url)
+            if response.status_code != 200:
+                return JsonResponse({'success': False, 'error': '无法从S3获取图片'})
             
-            # filter the image
+
+            img = PILImage.open(BytesIO(response.content))
+            
+
             if filter_type == 'gray':
                 filtered_img = ImageOps.grayscale(img)
-                # turn back to RGB mode for saving as JPEG
                 filtered_img = filtered_img.convert('RGB')
             elif filter_type == 'blur':
                 filtered_img = img.filter(ImageFilter.GaussianBlur(radius=2))
             elif filter_type == 'edge':
                 filtered_img = img.filter(ImageFilter.FIND_EDGES)
-                # turn back to RGB mode for saving as JPEG
+
                 filtered_img = filtered_img.convert('RGB')
             elif filter_type == 'solar':
                 filtered_img = ImageOps.solarize(img, threshold=128)
             else:
                 return JsonResponse({'success': False, 'error': '不支持的滤镜类型'})
             
-            # sava the image that has been filtered
-            filtered_img.save(img_path)
+
+            output = BytesIO()
+            filtered_img.save(output, format='JPEG')
+            output.seek(0)
             
-            # refresh the image object
+
+            from django.core.files.base import ContentFile
+            image.image.save(os.path.basename(image.image.name), ContentFile(output.getvalue()), save=True)
+            
+
             from django.utils import timezone
             cache_buster = int(timezone.now().timestamp())
             
@@ -96,10 +106,6 @@ import os
 def delete_image(request, image_id):
     try:
         image = Image.objects.get(id=image_id)
-        # delete the image file
-        if os.path.exists(image.image.path):
-            os.remove(image.image.path)
-        # delete the image object
         image.delete()
         return redirect('image_list')
     except Exception as e:
