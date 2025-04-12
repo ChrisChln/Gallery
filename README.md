@@ -73,3 +73,39 @@ Pull requests are welcome. If you'd like to suggest features or report bugs, ple
 
 
 ---
+
+## Deploying to AWS EC2 (Development Environment)
+
+This guide helps you run your Django project on an AWS EC2 instance (Amazon Linux 2023).
+
+### Prerequisites
+
+- An EC2 instance is launched and accessible.
+- Python 3, pip, and Git are installed on the instance.
+- Your project is already on the instance (via `git clone` or `scp`).
+
+---
+
+### Step 1: Install Python and Set Up Virtual Environment
+
+```bash
+sudo dnf install python3-pip -y
+pip3 install virtualenv
+python3 -m venv venv
+source venv/bin/activate
+
+### Step 2: Install project dependencies
+pip install -r requirements.txt
+
+### Step 3: Edit settings.py to allow your EC2 public IP
+# In settings.py, change:
+# ALLOWED_HOSTS = ['*']
+
+### Step 4: Run migrations and collect static files
+python manage.py makemigrations
+python manage.py migrate
+python manage.py collectstatic
+
+### Step 5: Run the development server
+python manage.py runserver 0.0.0.0:8000
+
