@@ -1,6 +1,6 @@
 # Image Processing Application
 
-A web-based image processing tool built with Django, offering a range of image editing features. This application allows users to upload images, editing and download image.
+A web-based image processing tool built with Django, offering a range of image editing features. This application allows users to upload images, editing and download image. Using AWS S3 for storage file, for local storage switch to local storage branch.
 
 ## Features
 
@@ -51,13 +51,11 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
-### 5. Start the Development Server
+### 5. Start the Development Server(For local only)
 
 ```bash
 python manage.py runserver
 ```
-
-Visit http://127.0.0.1:8000 in your browser to start using the app.
 
 ## Usage
 
