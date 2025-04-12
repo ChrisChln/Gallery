@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-pc$%0^4#u89i20o^+!jr))t=+0&e9)on_!##&e-5j-t2o4$x-g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -131,3 +131,29 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# AWS S3 Configuration
+INSTALLED_APPS += ['storages']
+
+# AWS S3 settings
+AWS_ACCESS_KEY_ID = 'ENTER YOU OWN KEY ID'  
+AWS_SECRET_ACCESS_KEY = 'ENTER YOUR OWN ACCESS KEY'  
+AWS_STORAGE_BUCKET_NAME = 'BUCKET NAME'  
+AWS_S3_REGION_NAME = 'us-east-2'  
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+# Removed AWS_DEFAULT_ACL as it's not supported by the bucket
+# AWS_DEFAULT_ACL = 'public-read'
+
+
+from image_site.storage_backends import StaticStorage, MediaStorage
+
+# S3 static settings
+STATICFILES_STORAGE = 'image_site.storage_backends.StaticStorage'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+
+# S3 media settings
+DEFAULT_FILE_STORAGE = 'image_site.storage_backends.MediaStorage'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'

@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path
 from gallery import views
 from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +27,4 @@ urlpatterns = [
     path('edit/<int:image_id>/', views.edit_image, name='edit_image'),
     path('apply_filter/<str:filter_type>/<int:image_id>/', views.apply_filter, name='apply_filter'),  # 新添加的 URL
     path('delete/<int:image_id>/', views.delete_image, name='delete_image'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
