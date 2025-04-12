@@ -65,13 +65,6 @@ Visit http://127.0.0.1:8000 in your browser to start using the app.
 2. Edit it with tools like crop, rotate, or apply filters.
 3. Review and manage your image history or revert changes as needed.
 
-## Contributing
-
-Pull requests are welcome. If you'd like to suggest features or report bugs, please open an issue or submit a PR.
-
-
-
-
 ---
 
 ## Deploying to AWS EC2
@@ -112,6 +105,12 @@ Editing setting.py:
 # AWS_SECRET_ACCESS_KEY = 'ENTER YOUR OWN ACCESS KEY'  
 # AWS_STORAGE_BUCKET_NAME = 'BUCKET NAME'  
 ```
+
+---
+
+## Contributing
+
+Pull requests are welcome. If you'd like to suggest features or report bugs, please open an issue or submit a PR.
 
 
 
