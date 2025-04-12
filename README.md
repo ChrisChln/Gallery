@@ -89,9 +89,10 @@ This guide helps you run your Django project on an AWS EC2 instance (Amazon Linu
 
 ---
 
-### Step 1: Install Python and Set Up Virtual Environment
+### Install Python and Set Up Virtual Environment EC2
 
 ```bash
+cd Gallery
 sudo dnf install python3-pip -y
 pip3 install virtualenv
 python3 -m venv venv
