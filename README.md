@@ -10,7 +10,7 @@ A web-based image processing tool built with Django, offering a range of image e
 - Edit: Edit image title.
 - Delete: Remove image from gallery. 
 - Image Filters: Gray, Sepia,Poster, Blur, Edge, and Solar
-- AWS S3: Images stored in S3 instead of local. 
+- AWS S3: Images stored in S3
 - Cloud Deployment: Can be hosted on AWS EC2. 
 
 ## Project Structure
