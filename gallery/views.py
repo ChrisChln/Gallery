@@ -66,7 +66,7 @@ def apply_filter(request, filter_type, image_id):  # make sure the filter_type i
             elif filter_type == 'solar':
                 filtered_img = ImageOps.solarize(img, threshold=128)
             else:
-                return JsonResponse({'success': False, 'error': '不支持的滤镜类型'})
+                return JsonResponse({'success': False, 'error': 'not accepted'})
             
             output = BytesIO()
             filtered_img.save(output, format='JPEG')
