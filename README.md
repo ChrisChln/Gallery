@@ -29,11 +29,15 @@ Image-Processing-Application/
 
 Follow these steps to run the project locally.
 
+```bash
+sudo dnf install python3 -y
+```
+
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/ChrisChln/Image-Processing-Application.git
-cd Image-Processing-Application
+git clone https://github.com/ChrisChln/Gallery.git
+cd Gallery
 ```
 
 ### 2. Set Up Virtual Environment
