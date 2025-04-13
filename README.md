@@ -4,14 +4,14 @@ A web-based image processing tool built with Django, offering a range of image e
 
 ## Features
 
-•	Image Upload: Users can upload images with titles.
-•	Image Display: Gallery-style display of images. 
-•	Download: Users can download images. 
-•	Edit: Edit image title.
-•	Delete: Remove image from gallery. 
-•	Image Filters: Gray, Sepia,Poster, Blur, Edge, and Solar
-•	AWS S3: Images stored in S3 instead of local. 
-•	Cloud Deployment: Can be hosted on AWS EC2. 
+- Image Upload: Users can upload images with titles.
+- Image Display: Gallery-style display of images. 
+- Download: Users can download images. 
+- Edit: Edit image title.
+- Delete: Remove image from gallery. 
+- Image Filters: Gray, Sepia,Poster, Blur, Edge, and Solar
+- AWS S3: Images stored in S3 instead of local. 
+- Cloud Deployment: Can be hosted on AWS EC2. 
 
 ## Project Structure
 
